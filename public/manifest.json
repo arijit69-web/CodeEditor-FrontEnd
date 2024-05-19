@@ -1,6 +1,6 @@
 {
-  "short_name": "Online Code Editor",
-  "name": "Online Code Editor", 
+  "short_name": "Coding Arrow Playground",
+  "name": "Coding Arrow Playground", 
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
