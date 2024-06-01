@@ -1,7 +1,23 @@
 import axios from 'axios';
 import './App.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './BackGround.jpg'; // Ensure your logo is added to the src folder
+import Modal from './Modal'; // Import the Modal component
+
+const templates = {
+  cpp: `#include <iostream>
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+    return 0;
+}`,
+  java: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}`,
+  python: `print("Hello, World!")`
+};
 
 function App() {
   const [code, setCode] = useState('');
@@ -9,6 +25,11 @@ function App() {
   const [userInput, setUserInput] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState('cpp');
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true); // State for modal
+
+  useEffect(() => {
+    setCode(templates[selectedLanguage]);
+  }, [selectedLanguage]);
 
   const handleLanguageChange = (e) => {
     setSelectedLanguage(e.target.value);
@@ -25,7 +46,7 @@ function App() {
     try {
       const { data } = await axios.post(`${process.env.REACT_APP_BACKEND_URI}/submit`, payload);
       setOutput(data.output);
-      console.log(data)
+      console.log(data);
     } catch (err) {
       console.log(err.response);
       setOutput("Error occurred while processing your request.");
@@ -34,8 +55,13 @@ function App() {
     }
   };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="App">
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal} /> {/* Include the Modal component */}
       <div className="header">
         <div className="logo-container">
           <img src={logo} alt="CodingArrow Logo" className="logo" />
